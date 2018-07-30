@@ -1,0 +1,8 @@
+app:
+  host: 0.0.0.0
+  port: 80
+database:
+  user: gif_zone
+  pass: gif_zone
+  port: 5432
+  host: db

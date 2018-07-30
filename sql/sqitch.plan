@@ -1,0 +1,4 @@
+%syntax-version=1.0.0
+%project=gif_zone
+
+initial 2018-07-28T21:46:25Z sk4ly <sk4ly@sk4lys-MacBook-Pro.local> # Adds initial db models

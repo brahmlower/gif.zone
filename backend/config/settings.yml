@@ -1,0 +1,8 @@
+app:
+  host: localhost
+  port: 8080
+database:
+  user: gif_zone
+  pass: gif_zone
+  port: 5432
+  host: localhost

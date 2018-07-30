@@ -1,0 +1,45 @@
+
+# Taken from: https://whitfin.io/speeding-up-rust-docker-builds/
+
+# Building the cached build resources ------------------------------------------
+
+# We need to use the Rust build image, because
+# we need the Rust compile and Cargo tooling
+FROM rust:1.25-slim as build
+
+# Creates a dummy project used to grab dependencies
+RUN mkdir /app                          && \
+    mkdir /src                          && \
+    cd /src                             && \
+    USER=root cargo new --bin backend
+WORKDIR /src/backend
+
+# Copies over *only* your manifests
+COPY ./backend/Cargo.lock /src/backend/Cargo.lock
+COPY ./backend/Cargo.toml /src/backend/Cargo.toml
+
+# Builds your dependencies and removes the fake source code from the dummy
+# project
+RUN cargo build --release
+RUN rm /src/backend/src/*
+RUN rm -rf /src/backend/target
+
+# Post dep cache, build app ----------------------------------------------------
+
+# Copies only your actual source code to avoid invalidating the cache at all
+COPY ./backend/src /src/backend/src
+
+# Builds again, this time it'll just be your actual source files being built
+RUN cargo build --release
+
+# Post build, binary package ---------------------------------------------------
+
+# Create a new stage with a minimal image because we already have a binary built
+FROM gcr.io/distroless/cc
+
+# Copies the binary from the "build" stage to the current stage
+COPY --from=build /src/backend/target/release/backend /app/backend
+WORKDIR /app
+
+# Configures the startup!
+CMD ["/app/backend"]
