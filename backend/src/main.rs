@@ -5,7 +5,7 @@ extern crate chrono;
 extern crate jsonwebtoken as jwt;
 extern crate serde;
 extern crate serde_json;
-// extern crate bodyparser;
+extern crate bodyparser;
 extern crate iron;
 extern crate router;
 extern crate config as config_;
@@ -16,7 +16,6 @@ extern crate fern;
 #[macro_use] extern crate postgres_derive;
 extern crate r2d2;
 extern crate r2d2_postgres;
-// extern crate time;
 
 // -----------------------------------------------------------------------------
 use std::env;

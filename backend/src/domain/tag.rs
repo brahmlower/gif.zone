@@ -2,25 +2,20 @@
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-use database::gif as database;
+use database::tag as database;
 use middleware::PostgresConnection;
 use models::error::DomainError;
-use models::gif::Gif;
-use models::gif::GifId;
+use models::tag::Tag;
+use models::tag::TagId;
 use models::search::SearchQuery;
 // -----------------------------------------------------------------------------
 
-pub fn list(conn: &PostgresConnection) -> Result<Vec<Gif>, DomainError> {
+pub fn list(conn: &PostgresConnection) -> Result<Vec<Tag>, DomainError> {
     let result = database::fetch_all(&conn)?;
     Ok(result)
 }
 
-pub fn get(conn: &PostgresConnection, id: GifId) -> Result<Gif, DomainError> {
+pub fn get(conn: &PostgresConnection, id: TagId) -> Result<Tag, DomainError> {
     let result = database::fetch_one(&conn, &id)?;
-    Ok(result)
-} 
-
-pub fn search(conn: &PostgresConnection, query: SearchQuery) -> Result<Vec<Gif>, DomainError> {
-    let result = database::fetch_all(&conn)?;
     Ok(result)
 }

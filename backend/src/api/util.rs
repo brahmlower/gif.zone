@@ -13,11 +13,22 @@ use serde;
 use serde_json;
 // -----------------------------------------------------------------------------
 use models::gif::GifId;
+use models::tag::TagId;
 use models::error::AppError;
 use models::error::ApiError;
 use models::error::DatabaseError;
 use models::error::DomainError;
 // -----------------------------------------------------------------------------
+
+/// TODO: There must be a better way of handling this. Is there no way to
+/// implement `To` or `From` which will take `Result<T: Serialize, DomainError>`
+/// and return a `IronResult<Response>`?
+pub fn result_to_ironresult<T: serde::Serialize>(result: Result<T, DomainError>) -> IronResult<Response> {
+    match result {
+        Ok(content) => to_json_response(content),
+        Err(error)  => to_json_error(AppError::from(error))
+    }
+}
 
 pub fn to_json_response<T: serde::Serialize>(content: T) -> IronResult<Response> {
     let s = serde_json::to_string(&content);
@@ -106,5 +117,10 @@ fn to_json_error_domain(app_e: &AppError, dom_e: &DomainError) -> (Status, Strin
 
 pub fn get_param_gif(req: &mut Request) -> GifId {
     let id_str = req.extensions.get::<Router>().unwrap().find("gif").unwrap();
+    id_str.parse().unwrap()
+}
+
+pub fn get_param_tag(req: &mut Request) -> TagId {
+    let id_str = req.extensions.get::<Router>().unwrap().find("tag").unwrap();
     id_str.parse().unwrap()
 }
