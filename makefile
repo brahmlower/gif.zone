@@ -30,6 +30,14 @@ frontend-clean:
 
 # Docker -----------------------------------------------------------------------
 
+.PHONY: backend-docker-build
+backend-docker-build:
+	docker-compose build backend
+
+.PHONY: backend-docker-run
+backend-docker-run:
+	docker-compose up backend
+
 .PHONY: frontend-docker-build
 frontend-docker-build:
 	docker-compose build frontend

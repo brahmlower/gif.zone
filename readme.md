@@ -1,5 +1,24 @@
 # Gif Zone
 
+## Build dependencies
+
+- cargo
+- npm
+- docker
+- docker-compose
+
+## Running Locally
+
+Everything is set up through docker and docker compose. After cloning the repo
+you'll want to build the frontend (cleanroom builds aren't set up yet) and then
+build the docker images:
+
+```
+make frontend-setup
+make frontend-build
+docker-compose build
+```
+
 ## Local development
 
 Build and run locally

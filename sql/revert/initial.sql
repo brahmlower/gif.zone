@@ -2,6 +2,7 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+DROP TABLE gif;
+DROP TABLE tag;
 
 COMMIT;

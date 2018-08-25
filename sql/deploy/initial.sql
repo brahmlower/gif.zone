@@ -8,6 +8,10 @@ CREATE TABLE gif (
     ftype varchar NOT NULL,
     views integer NOT NULL
 );
--- XXX Add DDLs here.
+
+CREATE TABLE tag (
+    id serial PRIMARY KEY,
+    name varchar NOT NULL
+);
 
 COMMIT;

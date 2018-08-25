@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, Container } from 'semantic-ui-react';
 import { GifCard } from './GifCard';
 import { SearchForm } from './Search';
+import { SiteFooter } from './SiteFooter';
 import './App.css';
 
 class App extends Component {
@@ -71,6 +72,7 @@ class App extends Component {
           <SearchForm />
           <hr />
           <Card.Group itemsPerRow={5} children={this.gifCardList()} />
+          <SiteFooter />
         </Container>
       </div>
     );
