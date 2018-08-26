@@ -28,6 +28,23 @@ frontend-run:
 frontend-clean:
 	rm -rf frontend/build
 
+# Database --------------------------------------------------------------------
+
+db-start:
+	docker-compose up -d db
+
+db-stop:
+	docker-compose stop db
+
+db-deploy:
+	sqitch deploy db:pg://gif_zone:gif_zone@localhost
+
+db-revert:
+	sqitch revert -y db:pg://gif_zone:gif_zone@localhost
+
+db-shell:
+	psql -U gif_zone -h localhost gif_zone
+
 # Docker -----------------------------------------------------------------------
 
 .PHONY: backend-docker-build

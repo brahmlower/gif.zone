@@ -15,13 +15,15 @@ const SQL_SELECT_ALL: &str =
     "SELECT id, \
             title, \
             ftype, \
-            views
+            fname, \
+            views \
     FROM    gif";
 
 const SQL_SELECT_ONE: &str =
     "SELECT id, \
             title, \
             ftype, \
+            fname, \
             views \
     FROM    gif \
     WHERE   id = $1";
@@ -30,6 +32,7 @@ const SQL_SELECT_QUERY: &str =
     "SELECT id, \
             title, \
             ftype, \
+            fname, \
             views \
     FROM    gif \
     WHERE   title LIKE $1";

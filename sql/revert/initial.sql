@@ -4,5 +4,6 @@ BEGIN;
 
 DROP TABLE gif;
 DROP TABLE tag;
+DROP TYPE file_type;
 
 COMMIT;
