@@ -1,81 +1,61 @@
 import React, { Component } from 'react';
-import { Card, Container } from 'semantic-ui-react';
-import { GifCard } from './GifCard';
-import { SearchForm } from './Search';
-import { SiteFooter } from './SiteFooter';
+import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
+import { Container, Menu } from 'semantic-ui-react';
+
+import { PageSearch } from './pages/Search.js'
+import { PageAbout } from './pages/About.js'
+import { PageTodo } from './pages/Todo.js'
 import './App.css';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      gifs: [
-        {
-          title: "Patrick Construction 1",
-          slug: "patrick-construction.gif",
-          views: "15k",
-          type: "webm",
-          description: "This is the first of many gifs!"
-        },
-        {
-          title: "Patrick Construction 2",
-          slug: "patrick-construction.gif",
-          views: "15k",
-          type: "gif"
-        },
-        {
-          title: "Patrick Construction 3",
-          slug: "patrick-construction.gif",
-          views: "15k",
-          type: "webm"
-        },
-        {
-          title: "Patrick Construction 4",
-          slug: "patrick-construction.gif",
-          views: "15k",
-          type: "gif"
-        },
-        {
-          title: "Patrick Construction 5",
-          slug: "patrick-construction.gif",
-          views: "15k",
-          type: "webm"
-        },
-        {
-          title: "Patrick Construction 6",
-          slug: "patrick-construction.gif",
-          views: "15k",
-          type: "gif"
-        },
-        {
-          title: "Patrick Construction 7",
-          slug: "patrick-construction.gif",
-          views: "15k",
-          type: "webm"
-        }
-      ]
-    }
-    this.gifCardList = this.gifCardList.bind(this);
-  }
-
-  gifCardList() {
-    return this.state.gifs.map((gif) => {
-      return (<GifCard {...gif} />)
-    });
-  }
-
   render() {
     return (
-      <div className="App">
-        <Container>
-          <h1> Gif zone </h1>
-          <SearchForm />
-          <hr />
-          <Card.Group itemsPerRow={5} children={this.gifCardList()} />
-          <SiteFooter />
-        </Container>
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <Container>
+            <h1> Gif zone </h1>
+            <SiteMenu />
+            <Switch>
+              <Route exact path="/" component={PageSearch} />
+              <Route exact path="/about" component={PageAbout} />
+              <Route exact path="/todo" component={PageTodo} />
+            </Switch>
+          </Container>
+        </div>
+      </BrowserRouter>
     );
+  }
+}
+
+export class SiteMenu extends Component {
+  state = { activeItem: 'Search' }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  render() {
+    const { activeItem } = this.state
+    const pages = [
+      ['Search', '/'],
+      ['About', '/about'],
+      ['To do', '/todo']
+    ]
+
+    return (
+      <div>
+        <Menu pointing secondary>
+          {pages.map((page) =>
+            <Menu.Item
+              as={Link}
+              to={page[1]}
+              name={page[0]}
+              active={activeItem === page[0]}
+              onClick={this.handleItemClick}
+            />
+          )}
+          <Menu.Item name="Blog" onClick={() => window.location.replace("http://brahmlower.io/tag/gifzone.html")} />
+        </Menu>
+      </div>
+    )
   }
 }
 

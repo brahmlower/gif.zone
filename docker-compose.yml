@@ -19,6 +19,7 @@ services:
     image: gif-zone-frontend
     volumes:
       - ./frontend/config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend/data:/usr/share/nginx/html/data:ro
     depends_on:
       - backend
     ports:

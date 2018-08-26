@@ -28,10 +28,10 @@ class ViewsLabel extends Component {
 
 export class GifCard extends Component {
   render() {
-    let typeLabel = (this.props.type === "webm") ? (<WebmLabel />) : (<GifLabel />);
+    let typeLabel = (this.props.ftype === "Webm") ? (<WebmLabel />) : (<GifLabel />);
     return (
       <Card>
-        <Image src={"data/" + this.props.slug} />
+        <Image src={"data/" + this.props.fname} />
         <Card.Content>
           <Card.Header>{this.props.title}</Card.Header>
           <Card.Meta>
