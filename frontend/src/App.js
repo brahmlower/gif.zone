@@ -1,38 +1,44 @@
-import React, { Component } from 'react';
-import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
-import { Container, Menu } from 'semantic-ui-react';
+import React, { Component } from 'react'
+import { Switch, Route, Link, BrowserRouter } from 'react-router-dom'
+import { Container, Menu } from 'semantic-ui-react'
 
 import { PageSearch } from './pages/Search.js'
 import { PageAbout } from './pages/About.js'
 import { PageTodo } from './pages/Todo.js'
-import './App.css';
+import './App.css'
 
 class App extends Component {
-  render() {
+  render () {
     return (
       <BrowserRouter>
-        <div className="App">
+        <div className='App'>
           <Container>
             <h1> Gif zone </h1>
             <SiteMenu />
             <Switch>
-              <Route exact path="/" component={PageSearch} />
-              <Route exact path="/about" component={PageAbout} />
-              <Route exact path="/todo" component={PageTodo} />
+              <Route exact path='/' component={PageSearch} />
+              <Route exact path='/about' component={PageAbout} />
+              <Route exact path='/todo' component={PageTodo} />
             </Switch>
           </Container>
         </div>
       </BrowserRouter>
-    );
+    )
   }
 }
 
 export class SiteMenu extends Component {
-  state = { activeItem: 'Search' }
+  constructor (props) {
+    super(props)
+    this.handleItemClick = this.handleItemClick.bind(this)
+    this.state = { activeItem: 'Search' }
+  }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleItemClick (e, { name }) {
+    this.setState({ activeItem: name })
+  }
 
-  render() {
+  render () {
     const { activeItem } = this.state
     const pages = [
       ['Search', '/'],
@@ -43,8 +49,9 @@ export class SiteMenu extends Component {
     return (
       <div>
         <Menu pointing secondary>
-          {pages.map((page) =>
+          {pages.map((page, i) =>
             <Menu.Item
+              key={i}
               as={Link}
               to={page[1]}
               name={page[0]}
@@ -52,11 +59,11 @@ export class SiteMenu extends Component {
               onClick={this.handleItemClick}
             />
           )}
-          <Menu.Item name="Blog" onClick={() => window.location.replace("http://brahmlower.io/tag/gifzone.html")} />
+          <Menu.Item name='Blog' onClick={() => window.location.replace('http://brahmlower.io/tag/gifzone.html')} />
         </Menu>
       </div>
     )
   }
 }
 
-export default App;
+export default App

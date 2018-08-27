@@ -1,6 +1,6 @@
 
-import React, { Component } from 'react';
-import { Card, Icon, Image, Label } from 'semantic-ui-react';
+import React, { Component } from 'react'
+import { Card, Icon, Image, Label } from 'semantic-ui-react'
 
 const WebmLabel = () => (
   <Label>Webm</Label>
@@ -27,11 +27,11 @@ class ViewsLabel extends Component {
 }
 
 export class GifCard extends Component {
-  render() {
-    let typeLabel = (this.props.ftype === "Webm") ? (<WebmLabel />) : (<GifLabel />);
+  render () {
+    let typeLabel = (this.props.ftype === 'Webm') ? (<WebmLabel />) : (<GifLabel />)
     return (
       <Card>
-        <Image src={"data/" + this.props.fname} />
+        <Image src={'data/' + this.props.fname} />
         <Card.Content>
           <Card.Header>{this.props.title}</Card.Header>
           <Card.Meta>

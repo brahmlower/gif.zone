@@ -1,49 +1,66 @@
-import React, { Component } from 'react';
-import { Card, Button, Input, Segment, Form } from 'semantic-ui-react';
-import { GifCard } from '../GifCard';
+
+import React, { Component } from 'react'
+import { Card, Button, Input, Segment, Form } from 'semantic-ui-react'
+import { GifCard } from '../GifCard'
+
+const defaultQuery = {
+  captions: 'any',
+  ftype: 'any',
+  labels: [],
+  value: ''
+}
 
 class PageSearch extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       gifs: []
     }
-    this.gifCardList = this.gifCardList.bind(this);
+    this.gifCardList = this.gifCardList.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
   }
 
-  componentDidMount() {
-    fetch("/api/gif")
+  componentDidMount () {
+    this.handleSearch(defaultQuery)
+  }
+
+  handleSearch (query) {
+    let args = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify(query)
+    }
+    fetch('/api/search', args)
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
             gifs: result
-          });
+          })
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
           console.log('api loading error!')
           console.log(error)
           this.setState({
             isLoaded: true,
             error
-          });
+          })
         }
       )
   }
 
-  gifCardList() {
-    return this.state.gifs.map((gif) => {
-      return (<GifCard {...gif} />)
-    });
+  gifCardList () {
+    return this.state.gifs.map((gif, i) => {
+      return (<GifCard key={i} {...gif} />)
+    })
   }
 
-  render() {
+  render () {
     return (
       <div>
-        <SearchForm />
+        <SearchForm onSearch={this.handleSearch} />
         <hr />
         <Card.Group itemsPerRow={5} children={this.gifCardList()} />
       </div>
@@ -52,23 +69,40 @@ class PageSearch extends Component {
 }
 
 class SearchInput extends Component {
-  render() {
+  constructor (props) {
+    super(props)
+    this.changeCallback = props.onChange
+    this.handleValueChange = this.handleValueChange.bind(this)
+  }
+
+  handleValueChange (event) {
+    this.changeCallback(event.target.value)
+  }
+
+  render () {
     return (
       <Form.Field>
-        <Input placeholder='Gif search'>{this.props.value}</Input>
+        <Input placeholder='Gif search' onChange={this.handleValueChange} />
       </Form.Field>
     )
   }
 }
 
 class CaptionSelection extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
+    this.changeCallback = props.onChange
+    this.handleItemClick = this.handleItemClick.bind(this)
     this.state = { activeItem: 'any' }
   }
-  handleItemClick = (e, { value }) => this.setState({ activeItem: value })
-  // todo: needs onChange callback
-  render() {
+
+  handleItemClick (e, { value }) {
+    this.setState({ activeItem: value })
+    this.changeCallback(value)
+  }
+
+  render () {
+    const { activeItem } = this.state
     return (
       <Form.Field>
         <label>Has Caption</label>
@@ -95,14 +129,20 @@ class CaptionSelection extends Component {
 }
 
 class TypeSelection extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
+    this.changeCallback = props.onChange
     this.state = { activeItem: 'any' }
+    this.handleItemClick = this.handleItemClick.bind(this)
   }
-  handleItemClick = (e, { value }) => this.setState({ activeItem: value })
-  // todo: needs onChange callback
-  render() {
-    const { activeItem } = this.state;
+
+  handleItemClick (e, { value }) {
+    this.setState({ activeItem: value })
+    this.changeCallback(value)
+  }
+
+  render () {
+    const { activeItem } = this.state
     return (
       <Form.Field>
         <label>Resource Type</label>
@@ -129,27 +169,50 @@ class TypeSelection extends Component {
 }
 
 class SearchForm extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
+    this.submitCallback = props.onSearch
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleValueChange = this.handleValueChange.bind(this)
+    this.handleCaptionChange = this.handleCaptionChange.bind(this)
+    this.handleTypeChange = this.handleTypeChange.bind(this)
     this.state = {
-      query: {
-        captions: 'any',
-        ftype: 'any',
-        labels: [],
-        value: ''
-      }
+      query: defaultQuery
     }
   }
-  render() {
+
+  handleSubmit (_) {
+    this.submitCallback(this.state.query)
+  }
+
+  handleValueChange (value) {
+    let state = this.state
+    state.query.value = value
+    this.setState(state)
+  }
+
+  handleCaptionChange (value) {
+    let state = this.state
+    state.query.captions = value
+    this.setState(state)
+  }
+
+  handleTypeChange (value) {
+    let state = this.state
+    state.query.ftype = value
+    this.setState(state)
+  }
+
+  render () {
     return (
       <Segment style={{textAlign: 'left'}}>
         <Form>
-          <SearchInput />
-          <div className="row">
-            <CaptionSelection />
-            <TypeSelection />
+          <SearchInput onChange={this.handleValueChange} />
+          <div className='row'>
+            <CaptionSelection onChange={this.handleCaptionChange} />
+            <TypeSelection onChange={this.handleTypeChange}/>
             <div>
-              <Button primary> Search </Button>
+              <Button primary onClick={this.handleSubmit}> Search </Button>
             </div>
           </div>
         </Form>
@@ -158,4 +221,4 @@ class SearchForm extends Component {
   }
 }
 
-export { PageSearch };
+export { PageSearch }

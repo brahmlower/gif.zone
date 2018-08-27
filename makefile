@@ -20,6 +20,10 @@ frontend-build:
 	cd frontend && npm run-script build
 	cp -r frontend/data frontend/build/data
 
+.PHONY: frontend-lint
+frontend-lint:
+	cd frontend && ./node_modules/eslint/bin/eslint.js src
+
 .PHONY: frontend-run
 frontend-run:
 	cd frontend && serve -s build
