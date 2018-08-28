@@ -1,11 +1,12 @@
 
 import React, { Component } from 'react'
 import { Card, Button, Input, Segment, Form } from 'semantic-ui-react'
-import { GifCard } from '../GifCard'
+import { GifCard } from '../components/GifCard'
+import { SiteMenu } from '../components/Menu'
 
 const defaultQuery = {
-  captions: 'any',
-  ftype: 'any',
+  captions: 'Any',
+  ftype: 'Any',
   labels: [],
   value: ''
 }
@@ -14,6 +15,7 @@ class PageSearch extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      display_results: false,
       gifs: []
     }
     this.gifCardList = this.gifCardList.bind(this)
@@ -37,7 +39,8 @@ class PageSearch extends Component {
       .then(
         (result) => {
           this.setState({
-            gifs: result
+            gifs: result,
+            display_results: true
           })
         },
         (error) => {
@@ -58,11 +61,14 @@ class PageSearch extends Component {
   }
 
   render () {
+    let num_results = (this.state.display_results) ? (<p> There are { this.state.gifs.length } results </p>) : null
     return (
       <div>
-        <SearchForm onSearch={this.handleSearch} />
+        <SiteMenu location={ this.props.location }/>
+        <SearchForm onSearch={ this.handleSearch } />
         <hr />
-        <Card.Group itemsPerRow={5} children={this.gifCardList()} />
+        { num_results }
+        <Card.Group itemsPerRow={ 5 } children={ this.gifCardList() } />
       </div>
     )
   }
@@ -82,7 +88,7 @@ class SearchInput extends Component {
   render () {
     return (
       <Form.Field>
-        <Input placeholder='Gif search' onChange={this.handleValueChange} />
+        <Input placeholder='Gif search' onChange={ this.handleValueChange } />
       </Form.Field>
     )
   }
@@ -93,7 +99,7 @@ class CaptionSelection extends Component {
     super(props)
     this.changeCallback = props.onChange
     this.handleItemClick = this.handleItemClick.bind(this)
-    this.state = { activeItem: 'any' }
+    this.state = { activeItem: 'Any' }
   }
 
   handleItemClick (e, { value }) {
@@ -109,18 +115,18 @@ class CaptionSelection extends Component {
         <Button.Group>
           <Button
             size='small'
-            value='any'
-            active={activeItem === 'any'}
+            value='Any'
+            active={activeItem === 'Any'}
             onClick={this.handleItemClick}>Any</Button>
           <Button
             size='small'
-            value='yes'
-            active={activeItem === 'yes'}
+            value='Yes'
+            active={activeItem === 'Yes'}
             onClick={this.handleItemClick}>Yes</Button>
           <Button
             size='small'
-            value='no'
-            active={activeItem === 'no'}
+            value='No'
+            active={activeItem === 'No'}
             onClick={this.handleItemClick}>No</Button>
         </Button.Group>
       </Form.Field>
@@ -132,7 +138,7 @@ class TypeSelection extends Component {
   constructor (props) {
     super(props)
     this.changeCallback = props.onChange
-    this.state = { activeItem: 'any' }
+    this.state = { activeItem: 'Any' }
     this.handleItemClick = this.handleItemClick.bind(this)
   }
 
@@ -149,18 +155,18 @@ class TypeSelection extends Component {
         <Button.Group>
           <Button
             size='small'
-            value='any'
-            active={activeItem === 'any'}
+            value='Any'
+            active={activeItem === 'Any'}
             onClick={this.handleItemClick}>Any</Button>
           <Button
             size='small'
-            value='gif'
-            active={activeItem === 'gif'}
+            value='Gif'
+            active={activeItem === 'Gif'}
             onClick={this.handleItemClick}>Gif</Button>
           <Button
             size='small'
-            value='webm'
-            active={activeItem === 'webm'}
+            value='Webm'
+            active={activeItem === 'Webm'}
             onClick={this.handleItemClick}>Webm</Button>
         </Button.Group>
       </Form.Field>
@@ -208,12 +214,10 @@ class SearchForm extends Component {
       <Segment style={{textAlign: 'left'}}>
         <Form>
           <SearchInput onChange={this.handleValueChange} />
-          <div className='row'>
-            <CaptionSelection onChange={this.handleCaptionChange} />
-            <TypeSelection onChange={this.handleTypeChange}/>
-            <div>
-              <Button primary onClick={this.handleSubmit}> Search </Button>
-            </div>
+          {/* <CaptionSelection onChange={this.handleCaptionChange} />
+          <TypeSelection onChange={this.handleTypeChange}/> */}
+          <div>
+            <Button primary onClick={this.handleSubmit}> Search </Button>
           </div>
         </Form>
       </Segment>

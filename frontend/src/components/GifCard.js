@@ -34,15 +34,15 @@ export class GifCard extends Component {
         <Image src={'data/' + this.props.fname} />
         <Card.Content>
           <Card.Header>{this.props.title}</Card.Header>
-          <Card.Meta>
+          {/* <Card.Meta>
             <a>Spongebob</a>
             <a>Patrick</a>
-          </Card.Meta>
+          </Card.Meta> */}
           <Card.Description>{this.props.description}</Card.Description>
         </Card.Content>
         <Card.Content extra>
           <ViewsLabel value={this.props.views} />
-          <CaptionLabel />
+          {/* <CaptionLabel /> */}
           { typeLabel }
         </Card.Content>
       </Card>
