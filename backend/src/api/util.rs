@@ -2,13 +2,13 @@
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 use iron::prelude::*;
-use iron::headers::Authorization;
-use iron::headers::Bearer;
+// use iron::headers::Authorization;
+// use iron::headers::Bearer;
 use iron::status;
 use iron::status::Status;
 use router::Router;
-use jwt::decode;
-use jwt::Validation;
+// use jwt::decode;
+// use jwt::Validation;
 use serde;
 use serde_json;
 // -----------------------------------------------------------------------------

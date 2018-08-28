@@ -1,5 +1,5 @@
 
-#![deny(unused_extern_crates)]
+// #![deny(unused_extern_crates)]
 
 extern crate chrono;
 extern crate jsonwebtoken as jwt;

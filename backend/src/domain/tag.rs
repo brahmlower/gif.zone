@@ -7,7 +7,7 @@ use middleware::PostgresConnection;
 use models::error::DomainError;
 use models::tag::Tag;
 use models::tag::TagId;
-use models::search::SearchQuery;
+// use models::search::SearchQuery;
 // -----------------------------------------------------------------------------
 
 pub fn list(conn: &PostgresConnection) -> Result<Vec<Tag>, DomainError> {

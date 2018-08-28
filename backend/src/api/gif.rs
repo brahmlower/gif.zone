@@ -3,11 +3,11 @@
 // -----------------------------------------------------------------------------
 use bodyparser;
 use iron::prelude::*;
-use iron::status;
+// use iron::status;
 // -----------------------------------------------------------------------------
 use middleware::PostgresReqExt;
 use models::error::AppError;
-use models::error::DomainError;
+// use models::error::DomainError;
 use models::search::SearchQuery;
 use domain::gif as domain;
 use super::util;
@@ -49,7 +49,7 @@ pub fn search(req: &mut Request) -> IronResult<Response> {
     // Parse SearchQuery from request body
     let query = req.get::<bodyparser::Struct<SearchQuery>>().unwrap().unwrap();
     // Call the domain function
-    let result = domain::search(&db_conn, query);
+    let result = domain::search(&db_conn, &query);
 
     // Build iron response from domain result
     util::result_to_ironresult(result)

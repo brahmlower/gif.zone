@@ -1,17 +1,31 @@
 
 // -----------------------------------------------------------------------------
-use std::collections::HashMap;
-use std::num::ParseIntError;
-use std::str::FromStr;
+// use std::collections::HashMap;
+// use std::num::ParseIntError;
+// use std::str::FromStr;
 // -----------------------------------------------------------------------------
-use chrono::prelude::*;
+// use chrono::prelude::*;
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-/// TODO: Implement Tag struct
-#[derive(Clone, PartialEq, Eq, Serialize, Deserialize, Debug)]
+#[derive(Clone, PartialEq, Eq, Deserialize, Debug)]
+pub enum FileType {
+    Any,
+    Gif,
+    Webm
+}
+
+#[derive(Clone, PartialEq, Eq, Deserialize, Debug)]
+pub enum Captions {
+    Any,
+    Yes,
+    No
+}
+
+#[derive(Clone, PartialEq, Eq, Deserialize, Debug)]
 pub struct SearchQuery {
-    pub term: String,
-    pub in_caption: Option<Vec<String>>,
-    // pub has_tags: Option<Vec<Tag>>
+    pub captions: Captions, // swap out for Option<Bool> at some point
+    pub ftype: FileType,    // swap out for Option<Bool> at some point (maybe. depends if we have mroe than just gif/webm)
+    pub labels: Vec<String>,
+    pub value: String
 }

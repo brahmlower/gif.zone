@@ -1,5 +1,6 @@
 
 mod gif;
+mod tag;
 mod util;
 
 // -----------------------------------------------------------------------------
@@ -34,7 +35,10 @@ fn routes() -> Router {
     // Gif endpoints
     router.get(     "/gif",         gif::list,      "gif_list");
     router.get(     "/gif/:gif",    gif::get,       "gif_get");
-    router.get(     "/search",      gif::search,    "gif_search");
+    router.post(    "/search",      gif::search,    "gif_search");
+    // Tag endpoints
+    router.get(     "/tag",         tag::list,  "tag_list");
+    router.get(     "/tag/:tag",    tag::get,   "tag_get");
 
     router
 }

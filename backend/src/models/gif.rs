@@ -1,11 +1,11 @@
 
 // -----------------------------------------------------------------------------
-use std::collections::HashMap;
+// use std::collections::HashMap;
 use std::num::ParseIntError;
 use std::str::FromStr;
 // -----------------------------------------------------------------------------
 use postgres::rows::Row;
-use chrono::prelude::*;
+// use chrono::prelude::*;
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
@@ -41,6 +41,7 @@ pub struct Gif {
     pub ftype:  FileType,
     pub fname:  String,
     pub views:  i32
+    // pub has_caption: bool
 }
 
 impl<'a> From<Row<'a>> for Gif {

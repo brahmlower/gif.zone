@@ -18,9 +18,9 @@ pub fn list(conn: &PostgresConnection) -> Result<Vec<Gif>, DomainError> {
 pub fn get(conn: &PostgresConnection, id: GifId) -> Result<Gif, DomainError> {
     let result = database::fetch_one(&conn, &id)?;
     Ok(result)
-} 
+}
 
-pub fn search(conn: &PostgresConnection, query: SearchQuery) -> Result<Vec<Gif>, DomainError> {
-    let result = database::fetch_all(&conn)?;
+pub fn search(conn: &PostgresConnection, query: &SearchQuery) -> Result<Vec<Gif>, DomainError> {
+    let result = database::fetch_filter(&conn, query)?;
     Ok(result)
 }

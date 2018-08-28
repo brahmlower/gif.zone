@@ -1,6 +1,6 @@
 
-backend/target/
-backend/**/*.rs.bk
+target
+*.rs.bk
 
-frontend/node_modules
-frontend/build
+node_modules
+build
