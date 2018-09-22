@@ -1,60 +1,38 @@
 # Gif Zone
 
-## Build dependencies
+## Development dependencies
 
-- cargo
-- npm
-- docker
+- cargo: For building the Rust backend
+- npm: For building the React frontend
+- sqitch: For database migrations
+- docker: Application packaging & delivery
 - docker-compose
 
-## Running Locally
+## Backend
 
-Everything is set up through docker and docker compose. After cloning the repo
-you'll want to build the frontend (cleanroom builds aren't set up yet) and then
-build the docker images:
+The gif.zone backend is written in Rust. Compiling and running is as simple as:
+
+```
+make backend-build
+make backend-run
+```
+
+## Frontend
+
+The gif.zone frontend is a single page react app.
 
 ```
 make frontend-setup
 make frontend-build
-docker-compose build
 ```
 
-## Local development
+## Local stack
 
-Build and run locally
-
-```
-make build
-make run
-```
-
-## Docker
-
-Build and run the docker container locally
+This assumes you have docker and docker-compose installed on your local machine. You will need to build the project before running docker-compose, since the frontend container is just an nginx container with `frontend/build` mounted as a volume.
 
 ```
-make docker-build
-make docker-run
+make db-start
+make db-deploy
+make frontend-build
+docker-compose up
 ```
-
-## Deployment
-
-You will need the aws cli, which is installed via pip. To avoid polluting your
-local machine, it's installed in a virtualenv. This process is wrapped in a
-make target:
-
-```
-make aws-setup
-source venv/bin/activate
-```
-
-From there, if you haven't already configured the api keys, you will need to do
-so. Adequate instruction on this process are found here, though you can run the
-following command which will prompt for each value. We are using `us-west-2`
-(oregon).
-
-```
-aws configure
-```
-
-https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/clusters

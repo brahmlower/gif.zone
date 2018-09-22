@@ -211,7 +211,7 @@ class SearchForm extends Component {
 
   render () {
     return (
-      <Segment style={{textAlign: 'left'}}>
+      <Segment>
         <Form>
           <SearchInput onChange={this.handleValueChange} />
           {/* <CaptionSelection onChange={this.handleCaptionChange} />

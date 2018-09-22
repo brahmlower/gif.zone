@@ -1,4 +1,7 @@
 
+VERSION=$(shell cat version | head -n 1)
+PROJECT_ID=$(shell gcloud config get-value project -q)
+
 # Backend ----------------------------------------------------------------------
 
 .PHONY: backend-build
@@ -34,18 +37,23 @@ frontend-clean:
 
 # Database --------------------------------------------------------------------
 
+.PHONY: db-start
 db-start:
 	docker-compose up -d db
 
+.PHONY: db-stop
 db-stop:
 	docker-compose stop db
 
+.PHONY: db-deploy
 db-deploy:
 	sqitch deploy db:pg://gif_zone:gif_zone@localhost
 
+.PHONY: db-revert
 db-revert:
 	sqitch revert -y db:pg://gif_zone:gif_zone@localhost
 
+.PHONY: db-shell
 db-shell:
 	psql -U gif_zone -h localhost gif_zone
 
@@ -69,14 +77,16 @@ frontend-docker-run:
 
 # Deployment -------------------------------------------------------------------
 
-.PHONY: frontend-aws-setup
-frontend-aws-setup:
-	virtualenv -p python3.6 venv
-	source venv/bin/activate && pip install awscli
-	@echo "\n\nRun 'source venv/bin/activate' to use the 'aws' utility.\n\n"
+.PHONY: docker-build
+docker-build:
+	docker build -t gcr.io/${PROJECT_ID}/gif.zone-backend:v${VERSION} -f backend/dockerfile .
+	docker build -t gcr.io/${PROJECT_ID}/gif.zone-frontend:v${VERSION} -f frontend/dockerfile .
 
-.PHONY: frontend-aws-push
-frontend-aws-push:
-	docker build -t gif_zone .
-	docker tag gif_zone:latest 918505329056.dkr.ecr.us-west-2.amazonaws.com/testing-gif_zone:latest
-	docker push 918505329056.dkr.ecr.us-west-2.amazonaws.com/testing-gif_zone:latest
+.PHONY: docker-push
+docker-push:
+	docker push gcr.io/${PROJECT_ID}/gif.zone-backend:v${VERSION}
+	docker push gcr.io/${PROJECT_ID}/gif.zone-frontend:v${VERSION}
+
+.PHONY: kube-deploy
+kube-deploy:
+	kubectl apply -f infrastructure/gif.zone-deployment.yml
