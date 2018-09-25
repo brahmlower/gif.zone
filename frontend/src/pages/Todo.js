@@ -14,7 +14,7 @@ class PageTodo extends Component {
   componentDidMount () {
     // This was designed around consuming the github API, but the api really only needs to support
     // the 'labels' url parameter, and return an object with the properties: html_url, title, and body
-    const issue_url = 'https://api.github.com/repos/bplower/ansible-factorio/issues?labels=enhancement'
+    const issue_url = 'https://api.github.com/repos/bplower/gif.zone/issues?labels=enhancement'
     fetch(issue_url)
     .then(res => res.json())
     .then(

@@ -74,19 +74,3 @@ frontend-docker-build:
 .PHONY: frontend-docker-run
 frontend-docker-run:
 	docker-compose up web
-
-# Deployment -------------------------------------------------------------------
-
-.PHONY: docker-build
-docker-build:
-	docker build -t gcr.io/${PROJECT_ID}/gif.zone-backend:v${VERSION} -f backend/dockerfile .
-	docker build -t gcr.io/${PROJECT_ID}/gif.zone-frontend:v${VERSION} -f frontend/dockerfile .
-
-.PHONY: docker-push
-docker-push:
-	docker push gcr.io/${PROJECT_ID}/gif.zone-backend:v${VERSION}
-	docker push gcr.io/${PROJECT_ID}/gif.zone-frontend:v${VERSION}
-
-.PHONY: kube-deploy
-kube-deploy:
-	kubectl apply -f infrastructure/gif.zone-deployment.yml
