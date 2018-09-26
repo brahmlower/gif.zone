@@ -1,14 +1,14 @@
 
 // -----------------------------------------------------------------------------
-use std::cmp::Eq;
-use std::hash::Hash;
-use std::collections::HashMap;
+// use std::cmp::Eq;
+// use std::hash::Hash;
+// use std::collections::HashMap;
 // -----------------------------------------------------------------------------
 use postgres::Connection;
 use postgres::types::ToSql;
-use postgres::types::FromSql;
+// use postgres::types::FromSql;
 use postgres::rows::Row;
-use postgres::stmt::Statement;
+// use postgres::stmt::Statement;
 // -----------------------------------------------------------------------------
 use models::error::DatabaseError;
 // -----------------------------------------------------------------------------

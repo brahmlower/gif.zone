@@ -16,7 +16,7 @@ use serde_json::to_string;
 pub fn setup_logger() -> Result<(), InitError> {
     Dispatch::new()
         .format(log_formatter)
-        .level(LevelFilter::Info)
+        .level(LevelFilter::Debug)
         .chain(stdout())
         .apply()?;
     Ok(())

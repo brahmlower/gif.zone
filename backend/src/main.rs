@@ -1,8 +1,8 @@
 
-// #![deny(unused_extern_crates)]
+#![deny(unused_extern_crates)]
 
-extern crate chrono;
-extern crate jsonwebtoken as jwt;
+// extern crate chrono;
+// extern crate jsonwebtoken as jwt;
 extern crate serde;
 extern crate serde_json;
 extern crate bodyparser;
@@ -51,5 +51,8 @@ fn main() {
     let chain = api::api(db_uri);
 
     info!("Listening for requests at: {}", http_str);
-    Iron::new(chain).http(http_str).unwrap();
+    match Iron::new(chain).http(http_str) {
+        Err(e) => panic!("Failure while serving iron: {}", e),
+        Ok(_r) => ()
+    }
 }

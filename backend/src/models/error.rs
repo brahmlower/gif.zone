@@ -54,7 +54,6 @@ pub enum DatabaseError {
 
 #[derive(Clone, Hash, PartialEq, Eq, Serialize, Deserialize, Debug)]
 pub enum DomainError {
-    // EntityIsNotPlanetOwner(EntityId, PlanetId),
     TransactionFailure(DatabaseError),
     BadCredentials
 }

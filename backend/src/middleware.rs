@@ -23,8 +23,16 @@ pub struct PostgresMiddleware {
 
 impl PostgresMiddleware {
     pub fn new(conn_str: String) -> PostgresMiddleware {
-        let manager = PostgresConnectionManager::new(conn_str, TlsMode::None).unwrap();
-        let pool = r2d2::Pool::new(manager).unwrap();
+        let res_conman = PostgresConnectionManager::new(conn_str, TlsMode::None);
+        let manager = match res_conman {
+            Err(e) => panic!("Connection manager failed: {}", e),
+            Ok(m)  => m
+        };
+        let res_pool = r2d2::Pool::new(manager);
+        let pool = match res_pool {
+            Err(e) => panic!("Failure while creating pool: {}", e),
+            Ok(p)  => p
+        };
         PostgresMiddleware { pool: pool }
     }
 }

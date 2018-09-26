@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 use bodyparser;
 use iron::prelude::*;
-// use iron::status;
+use iron::status;
 // -----------------------------------------------------------------------------
 use middleware::PostgresReqExt;
 use models::error::AppError;
@@ -47,7 +47,12 @@ pub fn search(req: &mut Request) -> IronResult<Response> {
     // Pull a database connection from the db pool
     let db_conn = req.get_db_conn();
     // Parse SearchQuery from request body
-    let query = req.get::<bodyparser::Struct<SearchQuery>>().unwrap().unwrap();
+    let res_body = req.get::<bodyparser::Struct<SearchQuery>>();
+    let query = match res_body {
+        Ok(Some(struct_body)) => struct_body,
+        Ok(None) => return Ok(Response::with( (status::InternalServerError, "No body") )),
+        Err(_err) => return Ok(Response::with( (status::InternalServerError, "Error while getting request body") ))
+    };
     // Call the domain function
     let result = domain::search(&db_conn, &query);
 

@@ -19,7 +19,9 @@ use middleware::PostgresMiddleware;
 
 pub fn api(db_uri: String) -> Chain {
     let routes = routes();
+    info!("Defining route chain");
     let mut chain = Chain::new(routes);
+    info!("Starting database middleware: {:?}", db_uri);
     chain.link_before(PostgresMiddleware::new(db_uri));
     chain.link_before(LogRequest);
     chain.link_after(DefaultContentType);
