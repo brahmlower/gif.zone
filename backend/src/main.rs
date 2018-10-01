@@ -47,7 +47,6 @@ fn main() {
     let db_uri      = app_config.database.to_string();
     let http_str    = app_config.http.to_string();
 
-    info!("Establishing routes and database middleware");
     let chain = api::api(db_uri);
 
     info!("Listening for requests at: {}", http_str);
