@@ -23,17 +23,15 @@ pub fn setup_logger() -> Result<(), InitError> {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct LogEvent<'a> {
-    message: &'a str
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct AppLog<'a> {
+struct AppLog<'a, T> {
     level: Level,
     target: &'a str,
-    event: String
+    event: T
 }
 
+/// This log formatter builds an AppLog struct, which is then serialised to
+/// JSON, then logged. This Provides a foundation for structured logging.
+/// Most logged content is just a string, but a struct can be logged as well
 fn log_formatter(out: FormatCallback, message: &Arguments, record: &Record) {
     let s = format!("{}", message);
     let al = AppLog {

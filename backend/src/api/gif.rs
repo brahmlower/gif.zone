@@ -1,13 +1,10 @@
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-use bodyparser;
 use iron::prelude::*;
-use iron::status;
 // -----------------------------------------------------------------------------
 use middleware::PostgresReqExt;
-use models::error::AppError;
-// use models::error::DomainError;
+use models::gif::GifId;
 use models::search::SearchQuery;
 use domain::gif as domain;
 use super::util;
@@ -15,47 +12,26 @@ use super::util;
 
 /// Gets all gifs. This should rarely be used I think
 pub fn list(req: &mut Request) -> IronResult<Response> {
-    // Pull a database connection from the db pool
     let db_conn = req.get_db_conn();
-    // Call the domain function
     let result = domain::list(&db_conn);
-
-    // Build iron response from domain result
-    match result {
-        Ok(content) => util::to_json_response(content),
-        Err(error)  => util::to_json_error(AppError::from(error))
-    }
+    util::result_to_ironresult(result)
 }
 
 /// Gets a single gif
 pub fn get(req: &mut Request) -> IronResult<Response> {
-    // Pull a database connection from the db pool
     let db_conn = req.get_db_conn();
-    let gif_id = util::get_param_gif(req);
-    // Call the domain function
+    let gif_id = util::get_param::<GifId>(req);
     let result = domain::get(&db_conn, gif_id);
-
-    // Build iron response from domain result
-    match result {
-        Ok(content) => util::to_json_response(content),
-        Err(error)  => util::to_json_error(AppError::from(error))
-    }
+    util::result_to_ironresult(result)
 }
 
 /// Search gifs
 pub fn search(req: &mut Request) -> IronResult<Response> {
-    // Pull a database connection from the db pool
     let db_conn = req.get_db_conn();
-    // Parse SearchQuery from request body
-    let res_body = req.get::<bodyparser::Struct<SearchQuery>>();
-    let query = match res_body {
-        Ok(Some(struct_body)) => struct_body,
-        Ok(None) => return Ok(Response::with( (status::InternalServerError, "No body") )),
-        Err(_err) => return Ok(Response::with( (status::InternalServerError, "Error while getting request body") ))
+    let body = match util::parse_body::<SearchQuery>(req) {
+        Ok(b) => b,
+        Err(e) => return e
     };
-    // Call the domain function
-    let result = domain::search(&db_conn, &query);
-
-    // Build iron response from domain result
+    let result = domain::search(&db_conn, &body);
     util::result_to_ironresult(result)
 }

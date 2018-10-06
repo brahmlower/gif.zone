@@ -21,16 +21,13 @@ pub fn api(db_uri: String) -> Chain {
     let routes = routes();
     info!("Defining route chain");
     let mut chain = Chain::new(routes);
-    info!("Starting database middleware: {:?}", db_uri);
+    info!("Starting database middleware");
     chain.link_before(PostgresMiddleware::new(db_uri));
     chain.link_before(LogRequest);
     chain.link_after(DefaultContentType);
     chain
 }
 
-/// These routes are served publicly. They are restricted such that there is
-/// limited write access to various endpoints, so that in most cases, change
-/// may only be brought about via action submitions.
 fn routes() -> Router {
     let mut router = Router::new();
 
@@ -47,11 +44,10 @@ fn routes() -> Router {
 
 struct DefaultContentType;
 
+/// All content returned by the API is application/json
 impl AfterMiddleware for DefaultContentType {
-    // This is run for every requests, AFTER all handlers have been executed
     fn after(&self, _req: &mut Request, mut resp: Response) -> IronResult<Response> {
         if resp.headers.get::<headers::ContentType>() == None {
-            // Set a standard header
             resp.headers.set(headers::ContentType::json());
         }
         Ok(resp)

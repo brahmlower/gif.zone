@@ -35,7 +35,10 @@ mod middleware;
 mod models;
 
 fn main() {
-    setup_logger().unwrap();
+    match setup_logger() {
+        Err(e) => error!("Logger setup failed: {}", e),
+        Ok(_) => ()
+    }
     let args: Vec<String> = env::args().collect();
     let config_path = match args.get(1) {
         Some(path)  => path,
@@ -52,6 +55,6 @@ fn main() {
     info!("Listening for requests at: {}", http_str);
     match Iron::new(chain).http(http_str) {
         Err(e) => panic!("Failure while serving iron: {}", e),
-        Ok(_r) => ()
+        Ok(_)  => ()
     }
 }

@@ -1,12 +1,11 @@
 
 // -----------------------------------------------------------------------------
-// use std::collections::HashMap;
 use std::num::ParseIntError;
 use std::str::FromStr;
 // -----------------------------------------------------------------------------
 use postgres::rows::Row;
-// use chrono::prelude::*;
 // -----------------------------------------------------------------------------
+use models::UriParam;
 // -----------------------------------------------------------------------------
 
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, ToSql, FromSql)]
@@ -18,6 +17,12 @@ impl FromStr for TagId {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let int = s.parse::<i32>()?;
         Ok(TagId(int))
+    }
+}
+
+impl UriParam for TagId {
+    fn as_uri_param() -> &'static str {
+        "tag"
     }
 }
 
