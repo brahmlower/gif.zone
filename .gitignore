@@ -5,3 +5,5 @@ target
 node_modules
 build
 .DS_Store
+dev_config/keys
+data

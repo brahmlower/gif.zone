@@ -1,7 +1,4 @@
 
-VERSION=$(shell cat version | head -n 1)
-PROJECT_ID=$(shell gcloud config get-value project -q)
-
 # Backend ----------------------------------------------------------------------
 
 .PHONY: backend-build
@@ -12,6 +9,10 @@ backend-build:
 backend-run:
 	cd backend && cargo run ./config/settings.yml
 
+.PHONY: backend-test
+backend-test:
+	cd backend && cargo test
+
 # Frontend ---------------------------------------------------------------------
 
 .PHONY: frontend-setup
@@ -21,7 +22,6 @@ frontend-setup:
 .PHONY: frontend-build
 frontend-build:
 	cd frontend && npm run-script build
-	cp -r frontend/data frontend/build/data
 
 .PHONY: frontend-lint
 frontend-lint:
@@ -74,3 +74,9 @@ frontend-docker-build:
 .PHONY: frontend-docker-run
 frontend-docker-run:
 	docker-compose up web
+
+# Local tls certs ---------------------------------------------------------------
+
+.PHONY: gen-keys
+gen-keys:
+	cd dev_config && ./gen_tls_keys.sh

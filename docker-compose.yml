@@ -15,10 +15,13 @@ services:
     volumes:
       - ./frontend/config/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./frontend/build:/usr/share/nginx/html/:ro
+      - ./dev_config/keys:/etc/nginx/certs/test.gif.zone:ro
+      - ./data:/var/www/gif.zone/data:ro
     depends_on:
       - backend
     ports:
       - "8000:80"
+      - "8443:443"
   db:
     image: postgres
     restart: always
