@@ -1,3 +1,4 @@
+environment: local
 app:
   host: localhost
   port: 8080

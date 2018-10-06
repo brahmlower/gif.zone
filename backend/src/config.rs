@@ -4,6 +4,7 @@
 use config_::Config;
 use config_::File;
 // -----------------------------------------------------------------------------
+use models::Environment;
 // -----------------------------------------------------------------------------
 
 pub fn get_config(path: &str) -> AppConfig {
@@ -61,15 +62,19 @@ impl ToString for DatabaseConfig {
 
 #[derive(Debug)]
 pub struct AppConfig {
-    pub http:     HttpConfig,
-    pub database: DatabaseConfig,
+    pub environment:    Environment,
+    pub http:           HttpConfig,
+    pub database:       DatabaseConfig,
 }
 
 impl<'a> From<&'a Config> for AppConfig {
     fn from(config: &Config) -> Self {
+        let config_env = config.get_str("environment").unwrap();
+        let env = config_env.parse::<Environment>().unwrap();
         AppConfig {
-            http:     HttpConfig::from(config),
-            database: DatabaseConfig::from(config)
+            environment:    env,
+            http:           HttpConfig::from(config),
+            database:       DatabaseConfig::from(config)
         }
     }
 }

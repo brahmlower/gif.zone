@@ -8,10 +8,10 @@ use models::gif::GifId;
 use models::search::SearchQuery;
 use domain::gif as domain;
 use domain::tag as tag_domain;
-use super::util;
+use api::util;
 // -----------------------------------------------------------------------------
 
-/// Gets all gifs. This should rarely be used I think
+/// Gets all gifs
 pub fn list(req: &mut Request) -> IronResult<Response> {
     let db_conn = req.get_db_conn();
     let result = domain::list(&db_conn);

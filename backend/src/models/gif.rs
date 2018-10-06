@@ -28,6 +28,7 @@ impl UriParam for GifId {
 
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, ToSql, FromSql)]
 #[postgres(name = "file_type")]
+#[serde(rename_all = "lowercase")]
 pub enum FileType {
     Gif,
     Webm

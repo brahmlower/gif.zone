@@ -15,6 +15,7 @@ use iron::IronResult;
 use router::Router;
 // -----------------------------------------------------------------------------
 use middleware::PostgresMiddleware;
+use domain;
 // -----------------------------------------------------------------------------
 
 pub fn api(db_uri: String) -> Chain {
@@ -31,6 +32,8 @@ pub fn api(db_uri: String) -> Chain {
 fn routes() -> Router {
     let mut router = Router::new();
 
+    // Info endpoint
+    router.get(     "/",    info,  "info");
     // Gif endpoints
     router.get(     "/gif",             gif::list,      "gif_list");
     router.get(     "/gif/:gif",        gif::get,       "gif_get");
@@ -62,4 +65,10 @@ impl BeforeMiddleware for LogRequest {
         info!("{} {} {}", req.method, req.url, req.remote_addr);
         Ok(())
     }
+}
+
+/// Gets all gifs. This should rarely be used I think
+fn info(_req: &mut Request) -> IronResult<Response> {
+    let result = domain::app_info();
+    util::result_to_ironresult(result)
 }
