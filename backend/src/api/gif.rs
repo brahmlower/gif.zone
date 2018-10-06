@@ -7,6 +7,7 @@ use middleware::PostgresReqExt;
 use models::gif::GifId;
 use models::search::SearchQuery;
 use domain::gif as domain;
+use domain::tag as tag_domain;
 use super::util;
 // -----------------------------------------------------------------------------
 
@@ -17,11 +18,19 @@ pub fn list(req: &mut Request) -> IronResult<Response> {
     util::result_to_ironresult(result)
 }
 
-/// Gets a single gif
+/// Gets a particular gif
 pub fn get(req: &mut Request) -> IronResult<Response> {
     let db_conn = req.get_db_conn();
     let gif_id = util::get_param::<GifId>(req);
-    let result = domain::get(&db_conn, gif_id);
+    let result = domain::get(&db_conn, &gif_id);
+    util::result_to_ironresult(result)
+}
+
+/// Gets tags associated with a particular gif
+pub fn get_tags(req: &mut Request) -> IronResult<Response> {
+    let db_conn = req.get_db_conn();
+    let gif_id = util::get_param::<GifId>(req);
+    let result = tag_domain::get_by_gif(&db_conn, &gif_id);
     util::result_to_ironresult(result)
 }
 

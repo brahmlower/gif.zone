@@ -34,6 +34,9 @@ mod logging;
 mod middleware;
 mod models;
 
+#[cfg(test)]
+mod tests;
+
 fn main() {
     match setup_logger() {
         Err(e) => error!("Logger setup failed: {}", e),

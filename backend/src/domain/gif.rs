@@ -16,9 +16,9 @@ pub fn list(conn: &PostgresConnection) -> Result<Vec<Gif>, DomainError> {
     Ok(result)
 }
 
-pub fn get(conn: &PostgresConnection, id: GifId) -> Result<Gif, DomainError> {
+pub fn get(conn: &PostgresConnection, id: &GifId) -> Result<Gif, DomainError> {
     info!("Getting gif with id {:?}", id);
-    let result = database::fetch_one(&conn, &id)?;
+    let result = database::fetch_one(&conn, id)?;
     Ok(result)
 }
 

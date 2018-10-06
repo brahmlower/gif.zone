@@ -17,7 +17,12 @@ CREATE TABLE gif (
 
 CREATE TABLE tag (
     id serial PRIMARY KEY,
-    name varchar NOT NULL
+    label varchar NOT NULL
+);
+
+CREATE TABLE gif_tags (
+    tag integer NOT NULL REFERENCES tag (id),
+    gif integer NOT NULL REFERENCES gif (id)
 );
 
 COMMIT;

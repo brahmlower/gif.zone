@@ -32,9 +32,10 @@ fn routes() -> Router {
     let mut router = Router::new();
 
     // Gif endpoints
-    router.get(     "/gif",         gif::list,      "gif_list");
-    router.get(     "/gif/:gif",    gif::get,       "gif_get");
-    router.post(    "/search",      gif::search,    "gif_search");
+    router.get(     "/gif",             gif::list,      "gif_list");
+    router.get(     "/gif/:gif",        gif::get,       "gif_get");
+    router.get(     "/gif/:gif/tags",   gif::get_tags,  "gif_get_tags");
+    router.post(    "/search",          gif::search,    "gif_search");
     // Tag endpoints
     router.get(     "/tag",         tag::list,  "tag_list");
     router.get(     "/tag/:tag",    tag::get,   "tag_get");
