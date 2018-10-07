@@ -30,12 +30,12 @@ const SQL_SELECT_ONE: &str =
 
 const SQL_SELECT_FILTER: &str =
     "SELECT id, \
-            title, \
-            ftype, \
-            fname, \
+            file_name, \
+            file_type, \
+            caption, \
             views \
     FROM    gif \
-    WHERE   title ILIKE '%' || $1 || '%'";
+    WHERE   caption ILIKE '%' || $1 || '%'";
 
 pub fn fetch_all(conn: &Connection) -> Result<Vec<Gif>, DatabaseError> {
     producing_list(conn, SQL_SELECT_ALL, Box::new([]))
@@ -47,5 +47,5 @@ pub fn fetch_one(conn: &Connection, id: &GifId) -> Result<Gif, DatabaseError> {
 }
 
 pub fn fetch_filter(conn: &Connection, query: &SearchQuery) -> Result<Vec<Gif>, DatabaseError> {
-    producing_list(conn, SQL_SELECT_FILTER, Box::new([ &query.value ]))
+    producing_list(conn, SQL_SELECT_FILTER, Box::new([ &query.cap_value ]))
 }

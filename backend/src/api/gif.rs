@@ -1,15 +1,22 @@
 
 // -----------------------------------------------------------------------------
+use std::str::FromStr;
 // -----------------------------------------------------------------------------
 use iron::prelude::*;
+use params::Map;
+use params::Params;
+use params::Value;
 // -----------------------------------------------------------------------------
 use middleware::PostgresReqExt;
 use models::gif::GifId;
+use models::gif::FileType;
+use models::tag::TagName;
 use models::search::SearchQuery;
 use domain::gif as domain;
 use domain::tag as tag_domain;
 use api::util;
 // -----------------------------------------------------------------------------
+use iron::status;
 
 /// Gets all gifs
 pub fn list(req: &mut Request) -> IronResult<Response> {
@@ -37,10 +44,47 @@ pub fn get_tags(req: &mut Request) -> IronResult<Response> {
 /// Search gifs
 pub fn search(req: &mut Request) -> IronResult<Response> {
     let db_conn = req.get_db_conn();
-    let body = match util::parse_body::<SearchQuery>(req) {
-        Ok(b) => b,
-        Err(e) => return e
-    };
-    let result = domain::search(&db_conn, &body);
+    let map = req.get_ref::<Params>().unwrap();
+    let query = map_to_search(map);
+    debug!("{:?}", query);
+    let result = domain::search(&db_conn, &query);
     util::result_to_ironresult(result)
+}
+
+fn map_to_search(query: &Map) -> SearchQuery {
+    let cap_only: Option<bool> = match query.find(&["cap_only"]) {
+        Some(&Value::Boolean(ref b)) => Some(*b),
+        Some(_) => None,
+        None => None,
+    };
+    let cap_value: Option<String> = match query.find(&["cap_value"]) {
+        Some(&Value::String(ref s)) => Some(s.to_string()),
+        Some(_) => None,
+        None => None,
+    };
+    let file_types: Option<Vec<FileType>> = match query.find(&["file_types"]) {
+        Some(&Value::String(ref s)) => {
+            let values = s.split(",");
+            let ftype_iter = values.filter_map(|i| FileType::from_str(i).ok());
+            Some(ftype_iter.collect())
+        },
+        Some(_) => None,
+        None => None,
+    };
+    let tags: Option<Vec<TagName>>= match query.find(&["tags"]) {
+        Some(&Value::String(ref s)) => {
+            let values = s.split(",");
+            let tag_iter = values.filter_map(|i| TagName::from_str(i).ok());
+            Some(tag_iter.collect())
+        },
+        Some(_) => None,
+        None => None,
+    };
+
+    SearchQuery {
+        cap_only:   cap_only,
+        cap_value:  cap_value,
+        file_types: file_types,
+        tags:       tags
+    }
 }

@@ -55,7 +55,7 @@ db-revert:
 
 .PHONY: db-shell
 db-shell:
-	psql -U gif_zone -h localhost gif_zone
+	PGPASSWORD=gif_zone psql -U gif_zone -h localhost gif_zone
 
 # Docker -----------------------------------------------------------------------
 

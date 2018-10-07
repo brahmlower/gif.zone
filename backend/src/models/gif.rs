@@ -2,6 +2,10 @@
 // -----------------------------------------------------------------------------
 use std::num::ParseIntError;
 use std::str::FromStr;
+use std::error::Error;
+use std::fmt::Display;
+use std::fmt::Formatter;
+use std::fmt::Result as FmtResult;
 // -----------------------------------------------------------------------------
 use postgres::rows::Row;
 // -----------------------------------------------------------------------------
@@ -26,7 +30,7 @@ impl UriParam for GifId {
     }
 }
 
-#[derive(PartialEq, Eq, Serialize, Deserialize, Debug, ToSql, FromSql)]
+#[derive(PartialEq, Eq, Serialize, Deserialize, Debug, Clone, ToSql, FromSql)]
 #[postgres(name = "file_type")]
 #[serde(rename_all = "lowercase")]
 pub enum FileType {
@@ -37,6 +41,32 @@ pub enum FileType {
 impl<'a> From<Row<'a>> for FileType {
     fn from(row: Row) -> Self {
         row.get(0)
+    }
+}
+
+#[derive(Debug)]
+pub struct ParseFileTypeError;
+
+impl Error for ParseFileTypeError {
+    fn description(&self) -> &str {
+        "Failed to parse string reference to FileType (impossible)"
+    }
+}
+
+impl Display for ParseFileTypeError {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(f, "ParseFileTypeError")
+    }
+}
+impl FromStr for FileType {
+    type Err = ParseFileTypeError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "gif"   => Ok(FileType::Gif),
+            "webm"  => Ok(FileType::Webm),
+            _ => Err(ParseFileTypeError)
+        }
     }
 }
 

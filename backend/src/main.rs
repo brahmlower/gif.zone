@@ -16,6 +16,7 @@ extern crate fern;
 #[macro_use] extern crate postgres_derive;
 extern crate r2d2;
 extern crate r2d2_postgres;
+extern crate params;
 
 // -----------------------------------------------------------------------------
 use std::env;
