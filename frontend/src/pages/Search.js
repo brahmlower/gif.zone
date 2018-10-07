@@ -68,7 +68,7 @@ class PageSearch extends Component {
         <SearchForm onSearch={ this.handleSearch } />
         <hr />
         { num_results }
-        <Card.Group itemsPerRow={ 5 } children={ this.gifCardList() } />
+        <Card.Group itemsPerRow={ 5 } children={ this.gifCardList() } doubling={ true } />
       </div>
     )
   }
