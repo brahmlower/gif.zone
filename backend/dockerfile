@@ -22,7 +22,7 @@ COPY ./backend/Cargo.toml /src/backend/Cargo.toml
 # project
 RUN cargo build --release
 RUN rm /src/backend/src/*
-RUN rm -rf /src/backend/target
+RUN rm /src/backend/target/release/backend*
 
 # Post dep cache, build app ----------------------------------------------------
 

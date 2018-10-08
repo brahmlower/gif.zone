@@ -8,16 +8,16 @@ CREATE TYPE file_type AS ENUM (
 );
 
 CREATE TABLE gif (
-    id      serial PRIMARY KEY,
-    title   varchar NOT NULL,
-    ftype   file_type NOT NULL,
-    fname   varchar NOT NULL,
-    views   integer NOT NULL
+    id          serial PRIMARY KEY,
+    resource_id varchar NOT NULL,
+    file_type   file_type NOT NULL,
+    caption     varchar,
+    views       integer NOT NULL
 );
 
 CREATE TABLE tag (
-    id serial PRIMARY KEY,
-    label varchar NOT NULL
+    id      serial PRIMARY KEY,
+    label   varchar NOT NULL
 );
 
 CREATE TABLE gif_tags (

@@ -23,18 +23,12 @@ class PageSearch extends Component {
   }
 
   componentDidMount () {
-    this.handleSearch(defaultQuery)
+    this.handleSearch('')
   }
 
   handleSearch (query) {
-    let args = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-      body: JSON.stringify(query)
-    }
-    fetch('/api/search', args)
+    let uri = '/api/search' + query
+    fetch(uri)
       .then(res => res.json())
       .then(
         (result) => {
@@ -188,7 +182,12 @@ class SearchForm extends Component {
   }
 
   handleSubmit (_) {
-    this.submitCallback(this.state.query)
+    let params = "?"
+    if (this.state.query.value != "") {
+      params += "cap_value=" + encodeURIComponent(this.state.query.value)
+    }
+    console.log(params)
+    this.submitCallback(params)
   }
 
   handleValueChange (value) {

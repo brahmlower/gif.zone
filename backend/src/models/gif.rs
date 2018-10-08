@@ -72,22 +72,21 @@ impl FromStr for FileType {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Gif {
-    pub id:     GifId,
-    pub title:  String,
-    pub ftype:  FileType,
-    pub fname:  String,
-    pub views:  i32
-    // pub has_caption: bool
+    pub id:             GifId,
+    pub resource_id:    String,
+    pub file_type:      FileType,
+    pub caption:        String,
+    pub views:          i32
 }
 
 impl<'a> From<Row<'a>> for Gif {
     fn from(row: Row) -> Self {
         Gif {
-            id:     row.get(0),
-            title:  row.get(1),
-            ftype:  row.get(2),
-            fname:  row.get(3),
-            views:  row.get(4)
+            id:             row.get(0),
+            resource_id:    row.get(1),
+            file_type:      row.get(2),
+            caption:        row.get(3),
+            views:          row.get(4)
         }
     }
 }

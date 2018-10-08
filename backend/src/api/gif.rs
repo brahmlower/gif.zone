@@ -10,13 +10,12 @@ use params::Value;
 use middleware::PostgresReqExt;
 use models::gif::GifId;
 use models::gif::FileType;
-use models::tag::TagName;
+use models::tag::TagLabel;
 use models::search::SearchQuery;
 use domain::gif as domain;
 use domain::tag as tag_domain;
 use api::util;
 // -----------------------------------------------------------------------------
-use iron::status;
 
 /// Gets all gifs
 pub fn list(req: &mut Request) -> IronResult<Response> {
@@ -44,9 +43,10 @@ pub fn get_tags(req: &mut Request) -> IronResult<Response> {
 /// Search gifs
 pub fn search(req: &mut Request) -> IronResult<Response> {
     let db_conn = req.get_db_conn();
-    let map = req.get_ref::<Params>().unwrap();
-    let query = map_to_search(map);
-    debug!("{:?}", query);
+    let query = match req.get_ref::<Params>() {
+        Ok(m)  => map_to_search(m),
+        Err(_) => DEFAULT_QUERY
+    };
     let result = domain::search(&db_conn, &query);
     util::result_to_ironresult(result)
 }
@@ -71,10 +71,10 @@ fn map_to_search(query: &Map) -> SearchQuery {
         Some(_) => None,
         None => None,
     };
-    let tags: Option<Vec<TagName>>= match query.find(&["tags"]) {
+    let tags: Option<Vec<TagLabel>>= match query.find(&["tags"]) {
         Some(&Value::String(ref s)) => {
             let values = s.split(",");
-            let tag_iter = values.filter_map(|i| TagName::from_str(i).ok());
+            let tag_iter = values.filter_map(|i| TagLabel::from_str(i).ok());
             Some(tag_iter.collect())
         },
         Some(_) => None,
@@ -88,3 +88,10 @@ fn map_to_search(query: &Map) -> SearchQuery {
         tags:       tags
     }
 }
+
+const DEFAULT_QUERY: SearchQuery = SearchQuery {
+    cap_only: None,
+    cap_value: None,
+    file_types: None,
+    tags: None
+};

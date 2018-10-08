@@ -37,6 +37,8 @@ const copyToClipboard = str => {
   document.body.removeChild(el);
 };
 
+// ExpandModal isn't fully implemented for now. Modals/specific gif views aren't implemented yet,
+// but are a critical feature
 class ExpandModal extends Component {
   render () {
     return (
@@ -82,12 +84,10 @@ class CopyLinkLabel extends Component {
 
 // Card -----------------------------------------------------------------------
 
-// ExpandModal is commented out for now. Modals/specific gif views aren't implemented yet,
-// but are a critical feature
 export class GifCard extends Component {
   render () {
-    let typeLabel = (this.props.ftype === 'Webm') ? (<WebmLabel />) : (<GifLabel />)
-    let medial_link = '/data/' + this.props.fname
+    // let typeLabel = (this.props.ftype === 'Webm') ? (<WebmLabel />) : (<GifLabel />)
+    let medial_link = '/data/' + this.props.resource_id
     return (
       <Card>
         <Image src={ medial_link } />

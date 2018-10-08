@@ -31,30 +31,30 @@ impl UriParam for TagId {
 }
 
 #[derive(Debug)]
-pub struct ParseTagNameError;
+pub struct ParseTagLabelError;
 
-impl Error for ParseTagNameError {
+impl Error for ParseTagLabelError {
     fn description(&self) -> &str {
-        "Failed to parse string reference to TagName (impossible)"
+        "Failed to parse string reference to TagLabel (impossible)"
     }
 }
 
-impl Display for ParseTagNameError {
+impl Display for ParseTagLabelError {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "ParseTagNameError")
+        write!(f, "ParseTagLabelError")
     }
 }
 
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, Clone, ToSql, FromSql)]
-pub struct TagName (pub String); // TODO: It'd be cool if we could just use a `str`
+pub struct TagLabel (pub String); // TODO: It'd be cool if we could just use a `str`
 
-impl FromStr for TagName {
-    type Err = ParseTagNameError;
+impl FromStr for TagLabel {
+    type Err = ParseTagLabelError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "" => Err(ParseTagNameError),
-            _ => Ok(TagName(s.to_owned()))
+            "" => Err(ParseTagLabelError),
+            _ => Ok(TagLabel(s.to_owned()))
         }
     }
 }
@@ -62,14 +62,14 @@ impl FromStr for TagName {
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, ToSql, FromSql)]
 pub struct Tag {
     pub id:     TagId,
-    pub name:   TagName
+    pub label:  TagLabel
 }
 
 impl<'a> From<Row<'a>> for Tag {
     fn from(row: Row) -> Self {
         Tag {
             id:     row.get(0),
-            name:   row.get(1)
+            label:  row.get(1)
         }
     }
 }
