@@ -22,7 +22,7 @@ CREATE TABLE tag (
 
 CREATE TABLE gif_tags (
     tag integer NOT NULL REFERENCES tag (id),
-    gif integer NOT NULL REFERENCES gif (id)
+    gif integer NOT NULL REFERENCES gif (id) ON DELETE CASCADE
 );
 
 COMMIT;

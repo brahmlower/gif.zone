@@ -20,35 +20,33 @@ class PageSearch extends Component {
     }
     this.gifCardList = this.gifCardList.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.handleErrors = this.handleErrors.bind(this)
   }
 
   componentDidMount () {
     this.handleSearch('')
   }
 
+  handleErrors(response) {
+    if (!response.ok) {
+      // todo properly handle these errors
+      console.log(response)
+      throw Error("request failed")
+    }
+    return response;
+  }
+
   handleSearch (query) {
     let uri = '/api/search' + query
     fetch(uri)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            gifs: result,
-            display_results: true
-          })
-        },
-        (error) => {
-          console.log('api loading error!')
-          console.log(error)
-          this.setState({
-            isLoaded: true,
-            error
-          })
-        }
-      )
+      .then(this.handleErrors)
+      .then(result => result.json())
+      .then(result => this.setState({ gifs: result, display_results: true }))
+      .catch(_ => {})
   }
 
   gifCardList () {
+    console.log(this.state)
     return this.state.gifs.map((gif, i) => {
       return (<GifCard key={i} {...gif} />)
     })
@@ -183,7 +181,7 @@ class SearchForm extends Component {
 
   handleSubmit (_) {
     let params = "?"
-    if (this.state.query.value != "") {
+    if (this.state.query.value !== "") {
       params += "cap_value=" + encodeURIComponent(this.state.query.value)
     }
     console.log(params)
