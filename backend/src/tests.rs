@@ -1,10 +1,9 @@
-
-use postgres::Connection;
-use postgres::TlsMode;
-use models::gif::GifId;
-use models::tag::TagId;
 use database::gif;
 use database::tag;
+use models::gif::GifId;
+use models::tag::TagId;
+use postgres::Connection;
+use postgres::TlsMode;
 
 const DB_STRING: &str = "postgres://gif_zone:gif_zone@localhost:5432";
 

@@ -1,11 +1,10 @@
-
 // -----------------------------------------------------------------------------
-use std::num::ParseIntError;
-use std::str::FromStr;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
+use std::num::ParseIntError;
+use std::str::FromStr;
 // -----------------------------------------------------------------------------
 use postgres::rows::Row;
 // -----------------------------------------------------------------------------
@@ -13,7 +12,7 @@ use models::UriParam;
 // -----------------------------------------------------------------------------
 
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, ToSql, FromSql)]
-pub struct TagId (pub i32);
+pub struct TagId(pub i32);
 
 impl FromStr for TagId {
     type Err = ParseIntError;
@@ -46,7 +45,7 @@ impl Display for ParseTagLabelError {
 }
 
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, Clone, ToSql, FromSql)]
-pub struct TagLabel (pub String); // TODO: It'd be cool if we could just use a `str`
+pub struct TagLabel(pub String); // TODO: It'd be cool if we could just use a `str`
 
 impl FromStr for TagLabel {
     type Err = ParseTagLabelError;
@@ -54,22 +53,22 @@ impl FromStr for TagLabel {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "" => Err(ParseTagLabelError),
-            _ => Ok(TagLabel(s.to_owned()))
+            _ => Ok(TagLabel(s.to_owned())),
         }
     }
 }
 
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, ToSql, FromSql)]
 pub struct Tag {
-    pub id:     TagId,
-    pub label:  TagLabel
+    pub id: TagId,
+    pub label: TagLabel,
 }
 
 impl<'a> From<Row<'a>> for Tag {
     fn from(row: Row) -> Self {
         Tag {
-            id:     row.get(0),
-            label:  row.get(1)
+            id: row.get(0),
+            label: row.get(1),
         }
     }
 }

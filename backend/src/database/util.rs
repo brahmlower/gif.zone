@@ -1,11 +1,10 @@
-
 // -----------------------------------------------------------------------------
 // use std::cmp::Eq;
 // use std::hash::Hash;
 // use std::collections::HashMap;
 // -----------------------------------------------------------------------------
-use postgres::Connection;
 use postgres::types::ToSql;
+use postgres::Connection;
 // use postgres::types::FromSql;
 use postgres::rows::Row;
 // use postgres::stmt::Statement;
@@ -13,7 +12,11 @@ use postgres::rows::Row;
 use models::error::DatabaseError;
 // -----------------------------------------------------------------------------
 
-pub fn producing_list<T: for<'a> From<Row<'a>>>(conn: &Connection, sql: &str, params: Box<[&ToSql]>) -> Result<Vec<T>, DatabaseError> {
+pub fn producing_list<T: for<'a> From<Row<'a>>>(
+    conn: &Connection,
+    sql: &str,
+    params: Box<[&ToSql]>,
+) -> Result<Vec<T>, DatabaseError> {
     let rows = conn.query(sql, &params)?;
     let vec = rows.iter().map(T::from).collect();
     Ok(vec)
@@ -26,12 +29,16 @@ pub fn producing_list<T: for<'a> From<Row<'a>>>(conn: &Connection, sql: &str, pa
 //     Ok(vec)
 // }
 
-pub fn producing_one<T: for<'a> From<Row<'a>>>(conn: &Connection, sql: &str, params: Box<[&ToSql]>) -> Result<T, DatabaseError> {
+pub fn producing_one<T: for<'a> From<Row<'a>>>(
+    conn: &Connection,
+    sql: &str,
+    params: Box<[&ToSql]>,
+) -> Result<T, DatabaseError> {
     let rows = conn.query(sql, &params)?;
     match rows.len() {
         0 => Err(DatabaseError::NoItemWithId),
         1 => Ok(T::from(rows.get(0))),
-        _ => Err(DatabaseError::TooManyItems)
+        _ => Err(DatabaseError::TooManyItems),
     }
 }
 

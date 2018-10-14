@@ -1,4 +1,3 @@
-
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 use postgres::Error as PostgresError;
@@ -11,7 +10,7 @@ use postgres::Error as PostgresError;
 pub enum AppError {
     Api(ApiError),
     Database(DatabaseError),
-    Domain(DomainError)
+    Domain(DomainError),
 }
 
 impl From<PostgresError> for DatabaseError {
@@ -41,7 +40,7 @@ impl From<DomainError> for AppError {
 
 #[derive(Clone, Hash, PartialEq, Eq, Serialize, Deserialize, Debug)]
 pub enum ApiError {
-    JsonParseResponseFailed
+    JsonParseResponseFailed,
 }
 
 #[derive(Clone, Hash, PartialEq, Eq, Serialize, Deserialize, Debug)]
@@ -49,11 +48,11 @@ pub enum DatabaseError {
     ConnectionFailure,
     NoItemWithId,
     TooManyItems,
-    QueryFailure
+    QueryFailure,
 }
 
 #[derive(Clone, Hash, PartialEq, Eq, Serialize, Deserialize, Debug)]
 pub enum DomainError {
     TransactionFailure(DatabaseError),
-    BadCredentials
+    BadCredentials,
 }

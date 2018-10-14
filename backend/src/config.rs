@@ -1,4 +1,3 @@
-
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 use config_::Config;
@@ -40,7 +39,7 @@ pub struct DatabaseConfig {
     host: String,
     port: i64,
     user: String,
-    pass: String
+    pass: String,
 }
 
 impl<'a> From<&'a Config> for DatabaseConfig {
@@ -56,15 +55,18 @@ impl<'a> From<&'a Config> for DatabaseConfig {
 
 impl ToString for DatabaseConfig {
     fn to_string(&self) -> String {
-        format!("postgres://{}:{}@{}:{}", self.user, self.pass, self.host, self.port)
+        format!(
+            "postgres://{}:{}@{}:{}",
+            self.user, self.pass, self.host, self.port
+        )
     }
 }
 
 #[derive(Debug)]
 pub struct AppConfig {
-    pub environment:    Environment,
-    pub http:           HttpConfig,
-    pub database:       DatabaseConfig,
+    pub environment: Environment,
+    pub http: HttpConfig,
+    pub database: DatabaseConfig,
 }
 
 impl<'a> From<&'a Config> for AppConfig {
@@ -72,9 +74,9 @@ impl<'a> From<&'a Config> for AppConfig {
         let config_env = config.get_str("environment").unwrap();
         let env = config_env.parse::<Environment>().unwrap();
         AppConfig {
-            environment:    env,
-            http:           HttpConfig::from(config),
-            database:       DatabaseConfig::from(config)
+            environment: env,
+            http: HttpConfig::from(config),
+            database: DatabaseConfig::from(config),
         }
     }
 }

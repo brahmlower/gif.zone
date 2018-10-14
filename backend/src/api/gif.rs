@@ -1,4 +1,3 @@
-
 // -----------------------------------------------------------------------------
 use std::str::FromStr;
 // -----------------------------------------------------------------------------
@@ -7,14 +6,14 @@ use params::Map;
 use params::Params;
 use params::Value;
 // -----------------------------------------------------------------------------
-use middleware::PostgresReqExt;
-use models::gif::GifId;
-use models::gif::FileType;
-use models::tag::TagLabel;
-use models::search::SearchQuery;
+use api::util;
 use domain::gif as domain;
 use domain::tag as tag_domain;
-use api::util;
+use middleware::PostgresReqExt;
+use models::gif::FileType;
+use models::gif::GifId;
+use models::search::SearchQuery;
+use models::tag::TagLabel;
 // -----------------------------------------------------------------------------
 
 /// Gets all gifs
@@ -44,8 +43,8 @@ pub fn get_tags(req: &mut Request) -> IronResult<Response> {
 pub fn search(req: &mut Request) -> IronResult<Response> {
     let db_conn = req.get_db_conn();
     let query = match req.get_ref::<Params>() {
-        Ok(m)  => map_to_search(m),
-        Err(_) => DEFAULT_QUERY
+        Ok(m) => map_to_search(m),
+        Err(_) => DEFAULT_QUERY,
     };
     let result = domain::search(&db_conn, &query);
     util::result_to_ironresult(result)
@@ -67,25 +66,25 @@ fn map_to_search(query: &Map) -> SearchQuery {
             let values = s.split(",");
             let ftype_iter = values.filter_map(|i| FileType::from_str(i).ok());
             Some(ftype_iter.collect())
-        },
+        }
         Some(_) => None,
         None => None,
     };
-    let tags: Option<Vec<TagLabel>>= match query.find(&["tags"]) {
+    let tags: Option<Vec<TagLabel>> = match query.find(&["tags"]) {
         Some(&Value::String(ref s)) => {
             let values = s.split(",");
             let tag_iter = values.filter_map(|i| TagLabel::from_str(i).ok());
             Some(tag_iter.collect())
-        },
+        }
         Some(_) => None,
         None => None,
     };
 
     SearchQuery {
-        cap_only:   cap_only,
-        cap_value:  cap_value,
+        cap_only: cap_only,
+        cap_value: cap_value,
         file_types: file_types,
-        tags:       tags
+        tags: tags,
     }
 }
 
@@ -93,5 +92,5 @@ const DEFAULT_QUERY: SearchQuery = SearchQuery {
     cap_only: None,
     cap_value: None,
     file_types: None,
-    tags: None
+    tags: None,
 };

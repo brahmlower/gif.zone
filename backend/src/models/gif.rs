@@ -1,11 +1,10 @@
-
 // -----------------------------------------------------------------------------
-use std::num::ParseIntError;
-use std::str::FromStr;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
+use std::num::ParseIntError;
+use std::str::FromStr;
 // -----------------------------------------------------------------------------
 use postgres::rows::Row;
 // -----------------------------------------------------------------------------
@@ -13,7 +12,7 @@ use models::UriParam;
 // -----------------------------------------------------------------------------
 
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, ToSql, FromSql)]
-pub struct GifId (pub i32);
+pub struct GifId(pub i32);
 
 impl FromStr for GifId {
     type Err = ParseIntError;
@@ -35,7 +34,7 @@ impl UriParam for GifId {
 #[serde(rename_all = "lowercase")]
 pub enum FileType {
     Gif,
-    Webm
+    Webm,
 }
 
 impl<'a> From<Row<'a>> for FileType {
@@ -63,30 +62,30 @@ impl FromStr for FileType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "gif"   => Ok(FileType::Gif),
-            "webm"  => Ok(FileType::Webm),
-            _ => Err(ParseFileTypeError)
+            "gif" => Ok(FileType::Gif),
+            "webm" => Ok(FileType::Webm),
+            _ => Err(ParseFileTypeError),
         }
     }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Gif {
-    pub id:             GifId,
-    pub resource_id:    String,
-    pub file_type:      FileType,
-    pub caption:        String,
-    pub views:          i32
+    pub id: GifId,
+    pub resource_id: String,
+    pub file_type: FileType,
+    pub caption: String,
+    pub views: i32,
 }
 
 impl<'a> From<Row<'a>> for Gif {
     fn from(row: Row) -> Self {
         Gif {
-            id:             row.get(0),
-            resource_id:    row.get(1),
-            file_type:      row.get(2),
-            caption:        row.get(3),
-            views:          row.get(4)
+            id: row.get(0),
+            resource_id: row.get(1),
+            file_type: row.get(2),
+            caption: row.get(3),
+            views: row.get(4),
         }
     }
 }

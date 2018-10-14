@@ -1,14 +1,15 @@
-
 use std::str::FromStr;
 
 pub mod account;
 pub mod error;
 pub mod gif;
-pub mod tag;
 pub mod search;
+pub mod tag;
 
 pub trait UriParam {
-    fn as_uri_param() -> &'static str where Self: Sized;
+    fn as_uri_param() -> &'static str
+    where
+        Self: Sized;
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -16,7 +17,7 @@ pub trait UriParam {
 pub enum Environment {
     Local,
     Test,
-    Prod
+    Prod,
 }
 
 impl FromStr for Environment {
@@ -33,7 +34,7 @@ impl FromStr for Environment {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AppInfo {
-    pub name:     &'static str,
-    pub version:  &'static str,
-    pub environment: Environment
+    pub name: &'static str,
+    pub version: &'static str,
+    pub environment: Environment,
 }

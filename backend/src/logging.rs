@@ -1,14 +1,13 @@
-
 // -----------------------------------------------------------------------------
-use std::io::stdout;
 use std::fmt::Arguments;
+use std::io::stdout;
 // -----------------------------------------------------------------------------
 use fern::Dispatch;
-use fern::InitError;
 use fern::FormatCallback;
+use fern::InitError;
+use log::Level;
 use log::LevelFilter;
 use log::Record;
-use log::Level;
 use serde_json::to_string;
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -26,7 +25,7 @@ pub fn setup_logger() -> Result<(), InitError> {
 struct AppLog<'a, T> {
     level: Level,
     target: &'a str,
-    event: T
+    event: T,
 }
 
 /// This log formatter builds an AppLog struct, which is then serialised to
@@ -35,13 +34,13 @@ struct AppLog<'a, T> {
 fn log_formatter(out: FormatCallback, message: &Arguments, record: &Record) {
     let s = format!("{}", message);
     let al = AppLog {
-        level:  record.level(),
+        level: record.level(),
         target: record.target(),
-        event:  s
+        event: s,
     };
     let json_log = match to_string(&al) {
-        Ok(x)   => x,
-        Err(_)  => "".to_owned(),
+        Ok(x) => x,
+        Err(_) => "".to_owned(),
     };
 
     out.finish(format_args!("{}", json_log))

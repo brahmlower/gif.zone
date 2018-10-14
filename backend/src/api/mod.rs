@@ -1,21 +1,20 @@
-
 mod gif;
 mod tag;
 mod util;
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
+use iron::headers;
 use iron::AfterMiddleware;
 use iron::BeforeMiddleware;
 use iron::Chain;
-use iron::headers;
+use iron::IronResult;
 use iron::Request;
 use iron::Response;
-use iron::IronResult;
 use router::Router;
 // -----------------------------------------------------------------------------
-use middleware::PostgresMiddleware;
 use domain;
+use middleware::PostgresMiddleware;
 // -----------------------------------------------------------------------------
 
 pub fn api(db_uri: String) -> Chain {
@@ -33,15 +32,15 @@ fn routes() -> Router {
     let mut router = Router::new();
 
     // Info endpoint
-    router.get(     "/",    info,  "info");
+    router.get("/", info, "info");
     // Gif endpoints
-    router.get(     "/gif",             gif::list,      "gif_list");
-    router.get(     "/gif/:gif",        gif::get,       "gif_get");
-    router.get(     "/gif/:gif/tags",   gif::get_tags,  "gif_get_tags");
-    router.get(     "/search",          gif::search,    "gif_search");
+    router.get("/gif", gif::list, "gif_list");
+    router.get("/gif/:gif", gif::get, "gif_get");
+    router.get("/gif/:gif/tags", gif::get_tags, "gif_get_tags");
+    router.get("/search", gif::search, "gif_search");
     // Tag endpoints
-    router.get(     "/tag",         tag::list,  "tag_list");
-    router.get(     "/tag/:tag",    tag::get,   "tag_get");
+    router.get("/tag", tag::list, "tag_list");
+    router.get("/tag/:tag", tag::get, "tag_get");
 
     router
 }

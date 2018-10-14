@@ -1,4 +1,3 @@
-
 pub mod gif;
-pub mod util;
 pub mod tag;
+pub mod util;
